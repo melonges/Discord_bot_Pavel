@@ -59,3 +59,4 @@ client.on("message", async message=>  {
 })
 client.login('NzgxNTA4NzU1MjkxNTA0Njcw.X7-qvg.LVFPvbN4FymV26zm69qix7TuynE');
 
+//// 12 june 2021 22:51
