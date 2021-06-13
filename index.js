@@ -13,7 +13,7 @@ client.on('message', message => {
             message.reply("Список всех команд \n  мой аватар - показ авы \n мое имя - показ имени \n аватар - показ инфы по профилю \n !play (без пробела ссылка) - включить музыку \n /leave - выйти из румы \n вруби музыку - рандом музыка");
             break
         case "аватар": {
-            const embed = new Discord.MessageEmbed().setTitle(message.author.username).setColor('#03dffc').setDescription(`Ваш ID: ${message.author.discriminator}`);
+            const embed = new Discord.MessageEmbed().setTitle(message.author.username).setColor('#03dffc').setDescription(`Ваш ID: ${message.author.discriminator}`).setImage(message.author.avatarURL());
             message.channel.send(embed);
 
         }
@@ -25,18 +25,18 @@ client.on('message', message => {
         case "мой аватар":
             message.reply(message.author.avatarURL()), console.log(message);
             break
-
-}});
+        case "test command":
+         return
+    }});
 
 
 
 client.on("message", async function voiceF(message) {
     if (message.content.startsWith("!play")){
         const str = message.content.slice(5)
-        // const vlm = message.content.slice(5)
         console.log(str)
         const connection = message.member.voice.channel.join();
-        await (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 1})
+        const playingMusic = (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 1})
     }
 
 
@@ -48,7 +48,7 @@ client.on("message", async function voiceF(message) {
 
     })
 
-client.on("messageDelete", message => message.channel.send(`Вы удалили сообщение ${message.content}`))
+client.on("messageDelete", message => message.reply(`Вы удалили сообщение "${message.content}"`))
 
 client.on("message", async message=>  {
     if (message.content === "вруби музыку") {
@@ -56,6 +56,18 @@ client.on("message", async message=>  {
         const connection = message.member.voice.channel.join();
         await(await connection).play(ytdl(`https://www.youtube.com/watch?v=Qp3YBgeLULQ`, {filter: "audioonly"}), {volume: 1})
     }
+})
+
+
+
+client.on("message",   async message=> {
+    if (message.content === "ты пидр") {
+        const connection = message.member.voice.channel.join()
+        message.reply("А может ты пидр?")
+        await (await connection).play(ytdl(`https://www.youtube.com/watch?v=NyYRzn9I9zE`, {filter: "audioonly"}), {volume: 1})
+        setTimeout(() => message.member.voice.channel.leave(), 15000)
+    }
+
 })
 client.login('NzgxNTA4NzU1MjkxNTA0Njcw.X7-qvg.LVFPvbN4FymV26zm69qix7TuynE');
 
