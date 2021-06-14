@@ -11,7 +11,7 @@ client.on('message', message => {
     switch (message.content) {
 
         case "!команды":
-            message.reply("\n Список всех команд: \n !мой аватар - показ авы \n !мое имя - показ имени \n !аватар - показ инфы по профилю \n !play (без пробела ссылка) - включить музыку \n !leave - выйти из румы \n вруби музыку - рандом музыка \n !hard - увеличение баса в музыку");
+            message.reply("\n Список всех команд: \n !мой аватар - показ авы \n !мое имя - показ имени \n !аватар - показ инфы по профилю \n !play (без пробела ссылка) - включить музыку \n !leave - выйти из румы \n вруби музыку - рандом музыка \n !hard - увеличение баса в музыку \n !vhard - разрывной бас");
             console.log(`${message.author.username} запросил команды`)
             break
         case "!аватар": {
@@ -28,6 +28,7 @@ client.on('message', message => {
             break
         case "!мой аватар":
             message.reply(message.author.avatarURL()), console.log(message);
+            console.log(`${message.author.username} запросил свой аватар`)
             break
         case "!test command":
          return
@@ -46,8 +47,15 @@ client.on("message", async function voiceF(message) {
         console.log(str);
         const connection = message.member.voice.channel.join();
         const playingMusic = (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 40});
+    } else if (message.content.startsWith("!vHard")) {
+        const str = message.content.slice(6);
+        console.log(str);
+        const connection = message.member.voice.channel.join();
+        const playingMusic = (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 90});
+        console.log("Разрывной бас врублен")
     }
         else if (message.content === "/leave") await message.member.voice.channel.leave()
+    console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
 
     })
 
