@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const ytdl = require('ytdl-core')
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+    console.log(`Павел ебашит ${client.user.tag}!`);
 
 });
 
