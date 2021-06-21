@@ -7,6 +7,10 @@ client.on('ready', () => {
 
 });
 
+// client.on('message', message => {
+//     console.log(`Сообщение от ${message.author.username}: ${message.content}`);
+// });
+
 client.on('message', message => {
     switch (message.content) {
 
