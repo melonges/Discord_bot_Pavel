@@ -6,11 +6,11 @@
   "dependencies": {
     "@discordjs/opus": "^0.5.3",
     "discord.js": "^12.5.3",
+    "dotenv": "^16.0.0",
     "ffmpeg-static": "^4.3.0",
     "opusscript": "0.0.8",
-    "ytdl-core": "^4.8.2"
+    "ytdl-core": "^4.10.1"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
