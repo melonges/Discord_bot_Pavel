@@ -78,10 +78,10 @@ client.on("message", async message=>  {
 
 client.on("message",   async message=> {
     if (message.content === "ты пидр") {
-        const connection = message.member.voice.channel.join()
+       // const connection = message.member.voice.channel.join()
         message.reply("А может ты пидор?")
         // await(await connection).play(ytdl(__dirname + "/videoplayback.mp4", {filter: "audioonly"}), {volume: 1})
-        setTimeout(() => message.member.voice.channel.leave(), 15000)
+       // setTimeout(() => message.member.voice.channel.leave(), 15000)
     }
 
 })
