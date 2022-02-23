@@ -42,17 +42,17 @@ client.on('message', message => {
 
 client.on("message", async function voiceF(message) {
     if (message.content.startsWith("!play")) {
-        const str = message.content.slice(5);
+        const str = message.content.slice(5).trim();
         console.log(str);
         const connection = message.member.voice.channel.join();
         const playingMusic = (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 1});
     } else if (message.content.startsWith("!hard")) {
-        const str = message.content.slice(5);
+        const str = message.content.slice(5).trim();
         console.log(str);
         const connection = message.member.voice.channel.join();
         const playingMusic = (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 40});
     } else if (message.content.startsWith("!vHard")) {
-        const str = message.content.slice(6);
+        const str = message.content.slice(6).trim();
         console.log(str);
         const connection = message.member.voice.channel.join();
         const playingMusic = (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 90});
