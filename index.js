@@ -2,14 +2,14 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const ytdl = require('ytdl-core')
 require('dotenv').config()
-
+const AUTHOR = "336516852995850241"
 client.on('ready', () => {
     console.log(`Павел ебашит ${client.user.tag}!`);
 
 });
 
 client.on('message', message => {
-     console.log(`Сообщение от ${message.author.username}: ${message.content}`);
+     console.log(`Сообщение от ${message.author.username}: ${message.content} в канале ${message.name}`);
  });
 
 client.on('message', message => {
@@ -39,6 +39,11 @@ client.on('message', message => {
     }});
 
 
+client.on("message", message => {
+    if (message.author.id === AUTHOR) {
+        message.react("👍")
+    }
+})
 
 client.on("message", async function voiceF(message) {
     if (message.content.startsWith("!play")) {
