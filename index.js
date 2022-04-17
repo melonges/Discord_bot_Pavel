@@ -63,7 +63,7 @@ client.on("message", async function voiceF(message) {
         const playingMusic = (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 90});
         console.log("Разрывной бас врублен")
     }
-        else if (message.content === "!leave"){ 
+        else if (message.content === "!leave"){
 		await message.member.voice.channel.leave()
     console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
 	}
@@ -83,11 +83,11 @@ client.on("message", async message=>  {
 
 
 client.on("message",   async message=> {
-    if (message.content === "ты пидр") {
-       // const connection = message.member.voice.channel.join()
+    if (message.content === "!sex") {
+       const connection = message.member.voice.channel.join()
         message.reply("А может ты пидор?")
-        // await(await connection).play(ytdl(__dirname + "/videoplayback.mp4", {filter: "audioonly"}), {volume: 1})
-       // setTimeout(() => message.member.voice.channel.leave(), 15000)
+        await(await connection).play(ytdl(`https://youtu.be/rK-iOXgPKZU`, {filter: "audioonly"}), {volume: 1})
+       setTimeout(() => message.member.voice.channel.leave(), 6000)
     }
 
 })
