@@ -85,7 +85,7 @@ client.on("message", async message=>  {
 client.on("message",   async message=> {
     if (message.content === "!sex") {
        const connection = message.member.voice.channel.join()
-        message.reply("А может ты пидор?")
+        // message.reply("А может ты пидор?")
         await(await connection).play(ytdl(`https://youtu.be/rK-iOXgPKZU`, {filter: "audioonly"}), {volume: 1})
        setTimeout(() => message.member.voice.channel.leave(), 6000)
     }
