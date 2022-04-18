@@ -40,7 +40,7 @@ client.on('message', message => {
             if(message.author.id === AUTHOR) {
                 adminplay = true;
                 timer = setTimeout(() => adminplay = false, 300_000);
-                message.reply("Только DJ Арбуз может включать музыку в течении этих 5 минут")
+                message.reply("Только может включать музыку в течении этих 5 минут")
             }
             break
     }});
