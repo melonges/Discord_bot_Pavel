@@ -88,6 +88,9 @@ client.on("message",   async message=> {
         // message.reply("А может ты пидор?")
         await(await connection).play(ytdl(`https://youtu.be/rK-iOXgPKZU`, {filter: "audioonly"}), {volume: 1})
        setTimeout(() => message.member.voice.channel.leave(), 5000)
+    } else if(message.content === "!хохол") {
+        const connection = message.member.voice.channel.join()
+        await(await connection).play(ytdl(`https://youtu.be/0YKlxX7DC_s`, {filter: "audioonly"}), {volume: 1})
     }
 
 })
