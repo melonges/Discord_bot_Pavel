@@ -3,6 +3,8 @@ const client = new Discord.Client();
 const ytdl = require('ytdl-core')
 require('dotenv').config()
 const AUTHOR = "336516852995850241"
+let adminplay = false;
+let timer
 client.on('ready', () => {
     console.log(`Павел ебашит ${client.user.tag}!`);
 
@@ -34,8 +36,12 @@ client.on('message', message => {
             message.reply(message.author.avatarURL()), console.log(message);
             console.log(`${message.author.username} запросил свой аватар`)
             break
-        case "!test command":
-         return
+        case "!adminplay":
+            if(message.author.id === AUTHOR) {
+                adminplay = true;
+                timer = setTimeout(() => adminplay = false, 300_000);
+            }
+            break
     }});
 
 
@@ -47,6 +53,7 @@ client.on("message", message => {
 
 client.on("message", async function voiceF(message) {
     if (message.content.startsWith("!play")) {
+        if(adminplay && message.author.id != AUTHOR) return;
         const str = message.content.slice(5).trim();
         console.log(str);
         const connection = message.member.voice.channel.join();
@@ -69,7 +76,7 @@ client.on("message", async function voiceF(message) {
 	}
     })
 
-client.on("messageDelete", message => message.reply(`Вы удалили сообщение "${message.content}"`));
+client.on("messageDelete", message =>  message.author.id != AUTHOR ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
 
 client.on("message", async message=>  {
     if (message.content === "вруби музыку")   {
