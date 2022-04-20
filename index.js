@@ -69,7 +69,7 @@ client.on("message", async function voiceF(message) {
         console.log(str);
         const connection = message.member.voice.channel.join();
         const playingMusic = (await connection).play(ytdl(`${str}`, {filter: "audioonly"}), {volume: 90});
-        console.log("Разрывной бас врублен")
+        console.log("Разрывной бас врублен");
     }
         else if (message.content === "!leave"){
 		await message.member.voice.channel.leave()
@@ -80,11 +80,11 @@ client.on("message", async function voiceF(message) {
 client.on("messageDelete", message =>  message.author.id != AUTHOR ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
 
 client.on("message", async message=>  {
-    if (message.content === "вруби музыку")   {
+    if (message.content === "вруби музыку") {
         message.reply("Врубаю")
         const connection = message.member.voice.channel.join();
-        console.log(`Зашел в комнату ${message.member.voice.channel.id}`)
-        await(await connection).play(ytdl(`https://www.youtube.com/watch?v=Qp3YBgeLULQ`, {filter: "audioonly"}), {volume: 1})
+        console.log(`Зашел в комнату ${message.member.voice.channel.id}`);
+        await(await connection).play(ytdl(`https://www.youtube.com/watch?v=Qp3YBgeLULQ`, {filter: "audioonly"}), {volume: 1});
     }
 })
 
@@ -101,7 +101,8 @@ client.on("message",   async message=> {
         await(await connection).play(ytdl(`https://youtu.be/0YKlxX7DC_s`, {filter: "audioonly"}), {volume: 1})
     } else if (message.content === "!arbuze" && message.author.id === AUTHOR) {
         const connection = message.member.voice.channel.join()
-        message.delete()
+        message.delete({timeout: 300})
+        // message.delete()
         await(await connection).play(ytdl(`https://youtu.be/jMgMVT5GwUI`, {filter: "audioonly"}), {volume: 1})
     }
 
