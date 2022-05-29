@@ -56,7 +56,6 @@ client.on("message", async function voiceF(message) {
   if (message.content.startsWith("!play")) {
     if (adminplay && message.author.id != AUTHOR) return;
     const str = message.content.slice(5).trim();
-    console.log(str);
     const connection = message.member.voice.channel.join();
     const playingMusic = (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 1 });
   } else if (message.content.startsWith("!hard")) {
@@ -94,11 +93,13 @@ client.on("message", async message => {
   if (message.content === "!sex") {
     const connection = message.member.voice.channel.join()
     // message.reply("А может ты пидор?")
+    message.delete({ timeout: 300 })
     await (await connection).play(ytdl(`https://youtu.be/rK-iOXgPKZU`, { filter: "audioonly" }), { volume: 1 })
     setTimeout(() => message.member.voice.channel.leave(), 5000)
   } else if (message.content === "!хохол") {
     const connection = message.member.voice.channel.join()
     await (await connection).play(ytdl(`https://youtu.be/0YKlxX7DC_s`, { filter: "audioonly" }), { volume: 1 })
+    message.delete({ timeout: 300 })
   } else if (message.content === "!join") message.member.voice.channel.join()
 
   else if (message.content === "!arbuze" && message.author.id === AUTHOR) {
