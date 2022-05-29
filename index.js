@@ -100,7 +100,10 @@ client.on("message", async message => {
     const connection = message.member.voice.channel.join()
     await (await connection).play(ytdl(`https://youtu.be/0YKlxX7DC_s`, { filter: "audioonly" }), { volume: 1 })
     message.delete({ timeout: 300 })
-  } else if (message.content === "!join") message.member.voice.channel.join()
+  } else if (message.content === "!join") {
+    message.member.voice.channel.join()
+    message.delete({ timeout: 300 })
+  }
 
   else if (message.content === "!arbuze" && message.author.id === AUTHOR) {
     const connection = message.member.voice.channel.join()
