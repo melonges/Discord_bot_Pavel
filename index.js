@@ -73,6 +73,7 @@ client.on("message", async function voiceF(message) {
   else if (message.content === "!leave") {
     await message.member.voice.channel.leave()
     console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
+    message.delete({ timeout: 300 })
   }
 })
 
