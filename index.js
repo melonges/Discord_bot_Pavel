@@ -134,10 +134,8 @@ client.on("message", async message => {
 })
 
 async function moveUser(message) {
-  console.log(message.content)
-  const result = message.content.match(/!move\s+(\d+)*\s*(\d+)?/)
-  console.log(result)
-  if (!result[2]) result[2] = message.author.id
+  const result = message.content.match(/!move\s+(\d+)*\s*/)
+  message.mentions.users.size ? result[2] = message.mentions.users.first().id : result[2] = message.author.id
   const member = message.guild.members.cache.get(result[2]);
   const channel = message.guild.channels.cache.get(result[1]);
   await member.voice.setChannel(channel);
