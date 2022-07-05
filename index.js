@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { MessageActionRow, MessageButton, GuildMember} = require('discord.js');
+const { MessageActionRow, MessageButton, GuildMember } = require('discord.js');
 const client = new Discord.Client();
 const ytdl = require('ytdl-core')
 require('dotenv').config()
@@ -110,32 +110,40 @@ client.on("message", async message => {
   else if (message.content === "!arbuze" && message.author.id === AUTHOR) {
     const connection = message.member.voice.channel.join()
     message.delete({ timeout: 300 })
-    // message.delete()
-    await (await connection).play(ytdl(`https://youtu.be/jMgMVT5GwUI`, { filter: "audioonly" }), { volume: 1 })
+      // message.delete()
+      (await connection).play(ytdl(`https://youtu.be/jMgMVT5GwUI`, { filter: "audioonly" }), { volume: 1 })
   } else if (message.content === "!sJoin") {
     const connection = message.member.voice.channel.join()
     message.delete({ timeout: 300 })
-    await (await connection).play(ytdl(`https://youtu.be/4whEYvJTuxc`, { filter: "audioonly" }), { volume: 1 })
+      (await connection).play(ytdl(`https://youtu.be/4whEYvJTuxc`, { filter: "audioonly" }), { volume: 1 })
   } else if (message.content === "!sLeave") {
     const connection = message.member.voice.channel.join()
     message.delete({ timeout: 300 })
-    await (await connection).play(ytdl(`https://youtu.be/AY7LPwk3lE4`, { filter: "audioonly" }), { volume: 1 })
+      (await connection).play(ytdl(`https://youtu.be/AY7LPwk3lE4`, { filter: "audioonly" }), { volume: 1 })
   } else if (message.content === "!lJoin") {
     const connection = message.member.voice.channel.join()
     message.delete({ timeout: 300 })
-    await (await connection).play(ytdl(`https://youtu.be/l94gMfQVx9k`, { filter: "audioonly" }), { volume: 1 })
+      (await connection).play(ytdl(`https://youtu.be/l94gMfQVx9k`, { filter: "audioonly" }), { volume: 1 })
   }
 
 })
 
 client.on("message", async message => {
   if (message.content.startsWith('!move')) {
-    const roomId = message.content.slice(5).trim();
-    const member = message.guild.members.cache.get(message.author.id);
-    const channel = message.guild.channels.cache.get(roomId);
-    await member.voice.setChannel(channel);
-    message.delete({timeout: 300})
-  }})
+    await moveUser(message);
+  }
+})
+
+async function moveUser(message) {
+  console.log(message.content)
+  const result = message.content.match(/!move\s+(\d+)*\s*(\d+)?/)
+  console.log(result)
+  if (!result[2]) result[2] = message.author.id
+  const member = message.guild.members.cache.get(result[2]);
+  const channel = message.guild.channels.cache.get(result[1]);
+  await member.voice.setChannel(channel);
+  message.delete({ timeout: 300 })
+}
 
 client.login(process.env.SECRET_KEY);
 
