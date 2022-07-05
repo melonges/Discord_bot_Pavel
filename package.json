@@ -9,7 +9,7 @@
     "dotenv": "^16.0.0",
     "ffmpeg-static": "^4.3.0",
     "opusscript": "0.0.8",
-    "ytdl-core": "^4.10.1"
+    "ytdl-core": "^4.11.0"
   },
   "scripts": {
     "start": "node index.js",

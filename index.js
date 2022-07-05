@@ -1,9 +1,10 @@
 const Discord = require('discord.js');
+const { MessageActionRow, MessageButton, GuildMember} = require('discord.js');
 const client = new Discord.Client();
 const ytdl = require('ytdl-core')
 require('dotenv').config()
 const AUTHOR = "336516852995850241"
-let adminplay = false;
+let adminPLay = false;
 client.on('ready', () => {
   console.log(`Павел ебашит ${client.user.tag}!`);
 
@@ -35,10 +36,11 @@ client.on('message', message => {
       message.reply(message.author.avatarURL()), console.log(message);
       console.log(`${message.author.username} запросил свой аватар`)
       break
-    case "!adminplay":
+    case "!adminPLay":
+      let timer;
       if (message.author.id === AUTHOR) {
-        adminplay = true;
-        timer = setTimeout(() => adminplay = false, 300_000);
+        adminPLay = true;
+        timer = setTimeout(() => adminPLay = false, 300_000);
         message.reply("Только может включать музыку в течении этих 5 минут")
       }
       break
@@ -54,10 +56,10 @@ client.on("message", message => {
 
 client.on("message", async function voiceF(message) {
   if (message.content.startsWith("!play")) {
-    if (adminplay && message.author.id != AUTHOR) return;
+    if (adminPLay && message.author.id != AUTHOR) return;
     const str = message.content.slice(5).trim();
     const connection = message.member.voice.channel.join();
-    const playingMusic = (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 1 });
+    (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 1 });
   } else if (message.content.startsWith("!hard")) {
     const str = message.content.slice(5).trim();
     console.log(str);
@@ -93,7 +95,6 @@ client.on("message", async message => {
 client.on("message", async message => {
   if (message.content === "!sex") {
     const connection = message.member.voice.channel.join()
-    // message.reply("А может ты пидор?")
     message.delete({ timeout: 300 })
     await (await connection).play(ytdl(`https://youtu.be/rK-iOXgPKZU`, { filter: "audioonly" }), { volume: 1 })
     setTimeout(() => message.member.voice.channel.leave(), 5000)
@@ -127,8 +128,14 @@ client.on("message", async message => {
 
 })
 
-
-
+client.on("message", async message => {
+  if (message.content.startsWith('!move')) {
+    const roomId = message.content.slice(5).trim();
+    const member = message.guild.members.cache.get(message.author.id);
+    const channel = message.guild.channels.cache.get(roomId);
+    await member.voice.setChannel(channel);
+    message.delete({timeout: 300})
+  }})
 
 client.login(process.env.SECRET_KEY);
 
