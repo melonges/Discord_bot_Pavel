@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const ytdl = require('ytdl-core')
+const fs = require("fs");
 require('dotenv').config()
 const AUTHOR = "336516852995850241"
 let adminPLay = false;
@@ -9,11 +10,12 @@ client.on('ready', () => {
 
 });
 
-client.on('message', message => {
-  console.log(`Сообщение от ${message.author.username}: ${message.content} в канале ${message.name}`);
-});
 
-client.on('message', message => {
+
+client.on('message', async message => {
+  if (message.author.id === AUTHOR) await message.react("👍")
+  if (message.content.startsWith('!move')) await moveUser(message);
+  logger(message);
   switch (message.content) {
     case "!команды":
       message.reply("\n Список всех команд: \n !мой аватар - показ авы \n !мое имя - показ имени \n !аватар - показ инфы по профилю \n !play (без пробела ссылка) - включить музыку \n !leave - выйти из румы \n вруби музыку - рандом музыка \n !hard - увеличение баса в музыку \n !vhard - разрывной бас");
@@ -21,12 +23,17 @@ client.on('message', message => {
       break
     case "!аватар": {
       const embed = new Discord.MessageEmbed().setTitle(message.author.username).setColor('#03dffc').setDescription(`Ваш ID: ${message.author.discriminator}`).setImage(message.author.avatarURL());
-      message.channel.send(embed);
+      await message.channel.send(embed);
       console.log(`${message.author.username} запросил аватар`)
-
     }
       break;
-
+      case "!join": {
+        if (message.member.voice.channel) {
+          message.member.voice.channel.join().then(_ => message.delete({ timeout: 300 }));
+        } else {
+          message.reply("Вы не находитесь в голосовом канале");
+        }
+      }
     case "!мое имя":
       message.reply(message.author.username);
       console.log(`${message.author.username} запросил свое имя`)
@@ -35,7 +42,7 @@ client.on('message', message => {
       message.reply(message.author.avatarURL()), console.log(message);
       console.log(`${message.author.username} запросил свой аватар`)
       break
-    case "!adminPLay":
+    case "!adminPlay":
       let timer;
       if (message.author.id === AUTHOR) {
         adminPLay = true;
@@ -45,13 +52,6 @@ client.on('message', message => {
       break
   }
 });
-
-
-client.on("message", message => {
-  if (message.author.id === AUTHOR) {
-    message.react("👍")
-  }
-})
 
 client.on("message", async function voiceF(message) {
   if (message.content.startsWith("!play")) {
@@ -78,7 +78,7 @@ client.on("message", async function voiceF(message) {
   }
 })
 
-client.on("messageDelete", message => message.author.id != AUTHOR ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
+client.on("messageDelete", message => message.author.id !== AUTHOR ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
 
 client.on("message", async message => {
   if (message.content === "вруби музыку") {
@@ -101,12 +101,10 @@ client.on("message", async message => {
     const connection = message.member.voice.channel.join()
     await (await connection).play(ytdl(`https://youtu.be/0YKlxX7DC_s`, { filter: "audioonly" }), { volume: 1 })
     message.delete({ timeout: 300 })
-  } else if (message.content === "!join") {
-    message.member.voice.channel.join()
-    message.delete({ timeout: 300 })
   }
 
-  else if (message.content === "!arbuze" && message.author.id === AUTHOR) {
+
+  else if (message.content === "!az" && message.author.id === AUTHOR) {
     const connection = message.member.voice.channel.join()
     message.delete({ timeout: 300 })
     // message.delete()
@@ -127,12 +125,6 @@ client.on("message", async message => {
 
 })
 
-client.on("message", async message => {
-  if (message.content.startsWith('!move')) {
-    await moveUser(message);
-  }
-})
-
 async function moveUser(message) {
   const result = message.content.match(/!move\s+(\d+)*\s*/)
   message.mentions.users.size ? result[2] = message.mentions.users.first().id : result[2] = message.author.id
@@ -142,6 +134,13 @@ async function moveUser(message) {
   message.delete({ timeout: 300 })
 }
 
-client.login(process.env.SECRET_KEY);
+client.login(process.env.SECRET_KEY).then(() => console.log("Запущен")).catch(err => console.log(err));
 
 //// 12 june 2021 22:51
+
+function logger(message) {
+    console.log(`${message.author.username}: ${message.content}`);
+    fs.writeFile(`${__dirname}/log.json`, `${message.author.username}: ${message.content}`, (err) => {
+        if (err) throw err;
+    })
+}
