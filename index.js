@@ -5,12 +5,15 @@ const fs = require("fs");
 require('dotenv').config()
 const AUTHOR = "336516852995850241"
 let adminPLay = false;
-client.on('ready', () => {
-  console.log(`Павел ебашит ${client.user.tag}!`);
 
-});
-
-
+// // logging when user joins/leaves voice channel
+// client.on('voiceStateUpdate', (oldMember, newMember) => {
+//     if (oldMember.voice.channel && !newMember.voice.channel) {
+//         logger(`${oldMember.user.username} left voice channel ${oldMember.voice.channel.name}`)
+//     } else if (!oldMember.voice.channel && newMember.voice.channel) {
+//         logger(`${newMember.user.username} joined voice channel ${newMember.voice.channel.name}`)
+//     }
+// })
 
 client.on('message', async message => {
   if (message.author.id === AUTHOR) await message.react("👍")
@@ -55,7 +58,7 @@ client.on('message', async message => {
 
 client.on("message", async function voiceF(message) {
   if (message.content.startsWith("!play")) {
-    if (adminPLay && message.author.id != AUTHOR) return;
+    if (adminPLay && message.author.id !== AUTHOR) return;
     const str = message.content.slice(5).trim();
     const connection = message.member.voice.channel.join();
     (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 1 });
@@ -140,7 +143,4 @@ client.login(process.env.SECRET_KEY).then(() => console.log("Запущен")).c
 
 function logger(message) {
     console.log(`${message.author.username}: ${message.content}`);
-    fs.writeFile(`${__dirname}/log.json`, `${message.author.username}: ${message.content}`, (err) => {
-        if (err) throw err;
-    })
 }
