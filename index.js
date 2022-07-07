@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const discordTTS = require('discord-tts');
 const { MessageButton } = require('discord-buttons')
-const fs = require("fs");
 const commands = require('./commands.js');
 const client = new Discord.Client();
 require('discord-buttons')(client);
@@ -21,7 +20,7 @@ function main() {
       if ((newState.member.user.id === AUTHOR || newState.member.user.bot) && isFollowing && newState.channelID !== oldState.channelID) {
         voiceConnection = await newState.member.voice.channel.join();
         await voiceConnection.play(ytdl(arbuzePresentation, { filter: 'audioonly' }));
-         commands.enter(0, 0, newState.member.voice.channel)
+        commands.enter(0, 0, newState.member.voice.channel)
       }
     });
     client.on('message', async message => {
@@ -40,15 +39,15 @@ function main() {
         channel.join().then(async connection => {
           broadcast.play(discordTTS.getVoiceStream(`${message.content.substring(4)}`));
           await connection.play(broadcast);
-          await message.delete({ timeout: 300 })
         });
+        // await message.delete({ timeout: 300 })
       }
       if (message.content.startsWith(config.PREFIX) && message.author.id === AUTHOR) {
         const commandBody = message.content.substring(config.PREFIX.length).split(' ');
         let channelId;
         const result = message.content.match(/!record\s+(\d+)*\s*/)
         result ? channelId = result[1] : channelId = message.member.voice.channelID;
-        await message.delete({timeout: 500})
+        await message.delete({ timeout: 500 })
         if (commandBody[0] === ('record')) commands.enter(message, channelId);
       }
       logger(message);
@@ -117,9 +116,9 @@ function main() {
         case "!join":
           if (message.member.voice.channel)
             message.member.voice.channel.join().then(_ => message.delete({ timeout: 300 }));
-           else
+          else
             message.reply("Вы не находитесь в голосовом канале");
-        break;
+          break;
         case "!мое имя":
           message.reply(message.author.username);
           console.log(`${message.author.username} запросил свое имя`)
@@ -132,8 +131,8 @@ function main() {
           let timer;
           if (message.author.id === AUTHOR)
             adminPLay = true;
-            timer = setTimeout(() => adminPLay = false, 300_000);
-            message.reply("Только может включать музыку в течении этих 5 минут")
+          timer = setTimeout(() => adminPLay = false, 300_000);
+          message.reply("Только может включать музыку в течении этих 5 минут")
           break
       }
     });
