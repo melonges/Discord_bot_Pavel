@@ -92,21 +92,21 @@ function main() {
 
     client.on("messageDelete", message => message.author.id !== AUTHOR ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
     client.on("messageUpdate", async (oldMessage, newMessage) => {
-        if (oldMessage.author.id !== AUTHOR) {
-            oldMessage.reply(`Вы обновили сообщение! Показать старое содержание сообщения на публику?"`)
-          oldMessageGlobal = oldMessage.content;
-              const button = new MessageButton()
-                  .setLabel("Показать?!")
-                  .setStyle("green")
-                  .setID("btn1")
+      if (oldMessage.author.id !== AUTHOR) {
+        oldMessage.reply(`Вы обновили сообщение! Показать старое содержание сообщения на публику?`)
+        oldMessageGlobal = oldMessage.content;
+        const button = new MessageButton()
+          .setLabel("Показать?!")
+          .setStyle("green")
+          .setID("btn1")
 
-             await oldMessage.channel.send(button)
-            }
-          })
+        await oldMessage.channel.send(button)
+      }
+    })
 
 
     client.on('clickButton', async (button) => {
-      if(button.id === "btn1"){
+      if (button.id === "btn1") {
         await button.reply.defer()
         await button.message.channel.send(oldMessageGlobal)
       }
@@ -161,7 +161,7 @@ function main() {
 
 
 
-  } catch (e) {console.error(e.message)}
+  } catch (e) { console.error(e.message) }
 }
 
 
