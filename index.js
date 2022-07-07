@@ -113,6 +113,7 @@ function main() {
         console.log("Команда вызвана");
         const result = msg.content.match(/!record\s+(\d+)*\s*/)
         result ? channelId = result[1] : channelId = msg.member.voice.channelID;
+        console.log(result);
         await msg.delete({ timeout: 500 })
         if (commandBody[0] === ('record')) commands.enter(msg, channelId);
         if (commandBody[0] === ('exit')) commands.exit(msg);

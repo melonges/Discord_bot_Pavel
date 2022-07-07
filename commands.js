@@ -37,7 +37,7 @@ exports.exit = function(msg) {
   if (msg.guild.voiceStates.cache.filter(a => a.connection !== null).size !== 1)
     return;
 
-  console.log('Leaving voice channel...');
+  console.log('finishing recording');
   //make sure it's .last() not .first().  some discord js magic going on rn
   // const dispatcher = conn.play(__dirname + "/../sounds/badumtss.mp3", { volume: 0.45 });
   // dispatcher.on("finish", () => {
