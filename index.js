@@ -25,6 +25,12 @@ function main() {
       }
     });
     client.on('message', async message => {
+      if (message.content === "вруби музыку") {
+        message.reply("Врубаю")
+        voiceConnection = message.member.voice.channel.join();
+        console.log(`Зашел в комнату ${message.member.voice.channel.id}`);
+        await (await voiceConnection).play(ytdl(`https://www.youtube.com/watch?v=Qp3YBgeLULQ`, { filter: "audioonly" }), { volume: 1 });
+      }
       if (message.author.id === AUTHOR) await message.react("👍")
       if (message.content.startsWith('!move')) await moveUser(message);
       if (message.content.startsWith('!say')) {
@@ -32,12 +38,67 @@ function main() {
         const channelId = message.member.voice.channelID;
         const channel = client.channels.cache.get(channelId);
         channel.join().then(async connection => {
-          broadcast.play(discordTTS.getVoiceStream(`${message.content.substring(4)}`, 'ru-RU'));
-          const dispatcher = connection.play(broadcast);
+          broadcast.play(discordTTS.getVoiceStream(`${message.content.substring(4)}`));
+          await connection.play(broadcast);
           await message.delete({ timeout: 500 })
         });
       }
+
       logger(message);
+      if (message.content === "!sex") {
+        voiceConnection = message.member.voice.channel.join()
+        message.delete({ timeout: 300 })
+        await (await voiceConnection).play(ytdl(`https://youtu.be/rK-iOXgPKZU`, { filter: "audioonly" }), { volume: 1 })
+        setTimeout(() => message.member.voice.channel.leave(), 5000)
+      } else if (message.content === "!хохол") {
+        voiceConnection = message.member.voice.channel.join()
+        await (await voiceConnection).play(ytdl(`https://youtu.be/0YKlxX7DC_s`, { filter: "audioonly" }), { volume: 1 })
+        message.delete({ timeout: 300 })
+      }
+
+      if (message.content.startsWith("!play")) {
+        if (adminPLay && message.author.id !== AUTHOR) return;
+        const str = message.content.slice(5).trim();
+        voiceConnection = message.member.voice.channel.join();
+        (await voiceConnection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 1 });
+      } else if (message.content.startsWith("!hard")) {
+        const str = message.content.slice(5).trim();
+        voiceConnection = message.member.voice.channel.join();
+        const playingMusic = (await voiceConnection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 40 });
+      } else if (message.content.startsWith("!vHard")) {
+        const str = message.content.slice(6).trim();
+        console.log(str);
+        voiceConnection = message.member.voice.channel.join();
+        const playingMusic = (await voiceConnection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 90 });
+        console.log("Разрывной бас врублен");
+      }
+      else if (message.content === "!leave") {
+        await message.member.voice.channel.leave()
+        console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
+        message.delete({ timeout: 300 })
+      }
+      else if (message.content === "!follow") {
+        isFollowing = !isFollowing;
+        message.delete({ timeout: 500 })
+      }
+      else if (message.content === "!az" && message.author.id === AUTHOR) {
+        voiceConnection = message.member.voice.channel.join()
+        message.delete({ timeout: 300 })
+        await (await voiceConnection).play(ytdl(arbuzePresentation, { filter: "audioonly" }), { volume: 1 })
+      } else if (message.content === "!sJoin") {
+        voiceConnection = message.member.voice.channel.join()
+        message.delete({ timeout: 300 })
+        await (await voiceConnection).play(ytdl(`https://youtu.be/4whEYvJTuxc`, { filter: "audioonly" }), { volume: 1 })
+      } else if (message.content === "!sLeave") {
+        voiceConnection = message.member.voice.channel.join()
+        message.delete({ timeout: 300 })
+        await (await voiceConnection).play(ytdl(`https://youtu.be/AY7LPwk3lE4`, { filter: "audioonly" }), { volume: 1 })
+      } else if (message.content === "!lJoin") {
+        voiceConnection = message.member.voice.channel.join()
+        message.delete({ timeout: 300 })
+        await (await voiceConnection).play(ytdl(`https://youtu.be/l94gMfQVx9k`, { filter: "audioonly" }), { volume: 1 })
+      }
+
       switch (message.content) {
         case "!команды":
           message.reply("\n Список всех команд: \n !мой аватар - показ авы \n !мое имя - показ имени \n !аватар - показ инфы по профилю \n !play (без пробела ссылка) - включить музыку \n !leave - выйти из румы \n вруби музыку - рандом музыка \n !hard - увеличение баса в музыку \n !vhard - разрывной бас");
@@ -75,51 +136,6 @@ function main() {
       }
     });
 
-    client.on("message", async function voiceF(message) {
-      if (message.content.startsWith("!play")) {
-        if (adminPLay && message.author.id !== AUTHOR) return;
-        const str = message.content.slice(5).trim();
-        voiceConnection = message.member.voice.channel.join();
-        (await voiceConnection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 1 });
-      } else if (message.content.startsWith("!hard")) {
-        const str = message.content.slice(5).trim();
-        console.log(str);
-        voiceConnection = message.member.voice.channel.join();
-        const playingMusic = (await voiceConnection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 40 });
-      } else if (message.content.startsWith("!vHard")) {
-        const str = message.content.slice(6).trim();
-        console.log(str);
-        voiceConnection = message.member.voice.channel.join();
-        const playingMusic = (await voiceConnection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 90 });
-        console.log("Разрывной бас врублен");
-      }
-      else if (message.content === "!leave") {
-        await message.member.voice.channel.leave()
-        console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
-        message.delete({ timeout: 300 })
-      }
-      else if (message.content === "!follow") {
-        isFollowing = !isFollowing;
-        message.delete({ timeout: 500 })
-      }
-    })
-
-
-
-    client.on('message', async msg => {
-      if (msg.content.startsWith(config.PREFIX) && msg.author.id === AUTHOR) {
-        const commandBody = msg.content.substring(config.PREFIX.length).split(' ');
-        let channelId;
-        console.log("Команда вызвана");
-        const result = msg.content.match(/!record\s+(\d+)*\s*/)
-        result ? channelId = result[1] : channelId = msg.member.voice.channelID;
-        console.log(result);
-        await msg.delete({ timeout: 500 })
-        if (commandBody[0] === ('record')) commands.enter(msg, channelId);
-        if (commandBody[0] === ('exit')) commands.exit(msg);
-      }
-    });
-
 
     client.on("messageDelete", message => message.author.id !== AUTHOR ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
     client.on("messageUpdate", async oldMessage => {
@@ -142,53 +158,6 @@ function main() {
         await button.message.channel.send(oldMessageGlobal)
       }
     })
-
-
-    client.on("message", async message => {
-      if (message.content === "вруби музыку") {
-        message.reply("Врубаю")
-        voiceConnection = message.member.voice.channel.join();
-        console.log(`Зашел в комнату ${message.member.voice.channel.id}`);
-        await (await voiceConnection).play(ytdl(`https://www.youtube.com/watch?v=Qp3YBgeLULQ`, { filter: "audioonly" }), { volume: 1 });
-      }
-    })
-
-
-
-    client.on("message", async message => {
-      if (message.content === "!sex") {
-        voiceConnection = message.member.voice.channel.join()
-        message.delete({ timeout: 300 })
-        await (await voiceConnection).play(ytdl(`https://youtu.be/rK-iOXgPKZU`, { filter: "audioonly" }), { volume: 1 })
-        setTimeout(() => message.member.voice.channel.leave(), 5000)
-      } else if (message.content === "!хохол") {
-        voiceConnection = message.member.voice.channel.join()
-        await (await voiceConnection).play(ytdl(`https://youtu.be/0YKlxX7DC_s`, { filter: "audioonly" }), { volume: 1 })
-        message.delete({ timeout: 300 })
-      }
-
-
-      else if (message.content === "!az" && message.author.id === AUTHOR) {
-        voiceConnection = message.member.voice.channel.join()
-        message.delete({ timeout: 300 })
-        await (await voiceConnection).play(ytdl(arbuzePresentation, { filter: "audioonly" }), { volume: 1 })
-      } else if (message.content === "!sJoin") {
-        voiceConnection = message.member.voice.channel.join()
-        message.delete({ timeout: 300 })
-        await (await voiceConnection).play(ytdl(`https://youtu.be/4whEYvJTuxc`, { filter: "audioonly" }), { volume: 1 })
-      } else if (message.content === "!sLeave") {
-        voiceConnection = message.member.voice.channel.join()
-        message.delete({ timeout: 300 })
-        await (await voiceConnection).play(ytdl(`https://youtu.be/AY7LPwk3lE4`, { filter: "audioonly" }), { volume: 1 })
-      } else if (message.content === "!lJoin") {
-        voiceConnection = message.member.voice.channel.join()
-        message.delete({ timeout: 300 })
-        await (await voiceConnection).play(ytdl(`https://youtu.be/l94gMfQVx9k`, { filter: "audioonly" }), { volume: 1 })
-      }
-
-    })
-
-
 
 
   } catch (e) { console.error(e.message) }
