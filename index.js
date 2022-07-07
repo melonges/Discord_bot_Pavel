@@ -17,11 +17,11 @@ let config = { PREFIX: process.env.PREFIX }
 
 function main() {
   try {
-    if (!fs.existsSync("./recordings")) fs.mkdirSync("./recordings");
     client.on('voiceStateUpdate', async (oldState, newState) => {
       if (newState.member.user.id === AUTHOR && isFollowing && newState.channelID !== oldState.channelID) {
         voiceConnection = await newState.member.voice.channel.join();
         await voiceConnection.play(ytdl(arbuzePresentation, { filter: 'audioonly' }));
+         commands.enter(newState.member.voice.channel)
       }
     });
     client.on('message', async message => {
@@ -40,10 +40,18 @@ function main() {
         channel.join().then(async connection => {
           broadcast.play(discordTTS.getVoiceStream(`${message.content.substring(4)}`));
           await connection.play(broadcast);
-          await message.delete({ timeout: 500 })
+          await message.delete({ timeout: 300 })
         });
       }
-
+      if (message.content.startsWith(config.PREFIX) && message.author.id === AUTHOR) {
+        const commandBody = message.content.substring(config.PREFIX.length).split(' ');
+        let channelId;
+        console.log("Команда вызвана");
+        const result = message.content.match(/!record\s+(\d+)*\s*/)
+        result ? channelId = result[1] : channelId = message.member.voice.channelID;
+        await message.delete({timeout: 500})
+        if (commandBody[0] === ('record')) commands.enter(message, channelId);
+      }
       logger(message);
       if (message.content === "!sex") {
         voiceConnection = message.member.voice.channel.join()

@@ -5,10 +5,14 @@ const createNewChunk = () => {
   return fs.createWriteStream(pathToFile);
 };
 
-exports.enter = function(msg, channelId) {
-
-  //filter out all channels that aren't voice or stage
-  const voiceChannel = msg.guild.channels.cache.get(channelId);
+exports.enter = function(voiceConnection = 0, msg, channelId) {
+    console.log(voiceConnection)
+    let voiceChannel
+    if (!fs.existsSync("./recordings")) fs.mkdirSync("./recordings");
+if (voiceConnection)
+    voiceChannel = voiceConnection
+else
+   voiceChannel = msg.guild.channels.cache.get(channelId);
 
 
   console.log(`Sliding into ${voiceChannel.name} ...`);
@@ -31,17 +35,4 @@ exports.enter = function(msg, channelId) {
     .catch(err => { throw err; });
 }
 
-exports.exit = function(msg) {
-  //check to see if the voice cache has any connections and if there is
-  //no ongoing connection (there shouldn't be undef issues with this).
-  if (msg.guild.voiceStates.cache.filter(a => a.connection !== null).size !== 1)
-    return;
 
-  console.log('finishing recording');
-  //make sure it's .last() not .first().  some discord js magic going on rn
-  // const dispatcher = conn.play(__dirname + "/../sounds/badumtss.mp3", { volume: 0.45 });
-  // dispatcher.on("finish", () => {
-  //     voiceChannel.leave();
-  //     console.log(`\nSTOPPED RECORDING\n`);
-  // });
-};
