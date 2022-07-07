@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@discordjs/opus": ">=0.8.0",
+    "discord-buttons": "^4.0.0-deprecated",
     "discord.js": "^12.5.3",
     "dotenv": "^16.0.0",
     "ffmpeg-static": "^4.3.0",
