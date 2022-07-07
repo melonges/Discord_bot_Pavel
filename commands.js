@@ -6,12 +6,12 @@ const createNewChunk = () => {
 };
 
 exports.enter = function(msg, channelId, voiceConnection = 0) {
-    let voiceChannel
-    if (!fs.existsSync("./recordings")) fs.mkdirSync("./recordings");
-if (voiceConnection)
+  let voiceChannel
+  if (!fs.existsSync("./recordings")) fs.mkdirSync("./recordings");
+  if (voiceConnection)
     voiceChannel = voiceConnection
-else
-   voiceChannel = msg.guild.channels.cache.get(channelId);
+  else
+    voiceChannel = msg.guild.channels.cache.get(channelId);
 
 
   console.log(`Sliding into ${voiceChannel.name} ...`);
@@ -24,10 +24,10 @@ else
       const receiver = conn.receiver;
       conn.on('speaking', (user, speaking) => {
         if (speaking) {
-          // console.log(`${user.username} started speaking`);
+          console.log(`${user.username} started speaking`);
           const audioStream = receiver.createStream(user, { mode: 'pcm' });
           audioStream.pipe(createNewChunk());
-          // audioStream.on('end', () => { console.log(`${user.username} stopped speaking`); });
+          audioStream.on('end', () => { console.log(`${user.username} stopped speaking`); });
         }
       });
     })
