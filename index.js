@@ -106,14 +106,14 @@ function main() {
 
 
 
-    client.on('message', msg => {
+    client.on('message', async msg => {
       if (msg.content.startsWith(config.PREFIX) && msg.author.id === AUTHOR) {
         const commandBody = msg.content.substring(config.PREFIX.length).split(' ');
         let channelId;
         console.log("Команда вызвана");
         const result = msg.content.match(/!record\s+(\d+)*\s*/)
         result ? channelId = result[1] : channelId = msg.member.voice.channelID;
-
+        await msg.delete({ timeout: 500 })
         if (commandBody[0] === ('record')) commands.enter(msg, channelId);
         if (commandBody[0] === ('exit')) commands.exit(msg);
       }
