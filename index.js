@@ -5,7 +5,7 @@ require('dotenv').config()
 require('discord-buttons')(client);
 const AUTHOR = "336516852995850241"
 let adminPLay = false;
-const { MessageButton, MessageActionRow } = require('discord-buttons')
+const {MessageButton} = require('discord-buttons')
 let oldMessageGlobal = ""
 let isFollowing = true;
 let arbuzePresentation = "https://youtu.be/jMgMVT5GwUI"
@@ -14,7 +14,7 @@ let arbuzePresentation = "https://youtu.be/jMgMVT5GwUI"
 function main() {
   try {
     client.on('voiceStateUpdate', async (oldState, newState) => {
-      if(newState.member.user.id === AUTHOR && isFollowing) {
+      if(newState.member.user.id === AUTHOR && isFollowing && newState.channelID !== oldState.channelID) {
         const connection = await newState.member.voice.channel.join();
         await connection.play(ytdl(arbuzePresentation, { filter: 'audioonly' }));
       }
