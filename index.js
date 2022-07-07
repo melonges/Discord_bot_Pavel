@@ -7,19 +7,18 @@ const AUTHOR = "336516852995850241"
 let adminPLay = false;
 const { MessageButton, MessageActionRow } = require('discord-buttons')
 let oldMessageGlobal = ""
-// // logging when user joins/leaves voice channel
-// client.on('voiceStateUpdate', (oldMember, newMember) => {
-//     if (oldMember.voice.channel && !newMember.voice.channel) {
-//         logger(`${oldMember.user.username} left voice channel ${oldMember.voice.channel.name}`)
-//     } else if (!oldMember.voice.channel && newMember.voice.channel) {
-//         logger(`${newMember.user.username} joined voice channel ${newMember.voice.channel.name}`)
-//     }
-// })
-
+let isFollowing = true;
+let arbuzePresentation = "https://youtu.be/jMgMVT5GwUI"
 
 
 function main() {
   try {
+    client.on('voiceStateUpdate', async (oldState, newState) => {
+      if(newState.member.user.id === AUTHOR && isFollowing) {
+        const connection = await newState.member.voice.channel.join();
+        await connection.play(ytdl(arbuzePresentation, { filter: 'audioonly' }));
+      }
+    });
     client.on('message', async message => {
       if (message.author.id === AUTHOR) await message.react("👍")
       if (message.content.startsWith('!move')) await moveUser(message);
@@ -84,6 +83,10 @@ function main() {
         console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
         message.delete({ timeout: 300 })
       }
+      else if (message.content === "!follow") {
+        isFollowing = !isFollowing;
+        message.delete({ timeout: 500 })
+      }
     })
 
 
@@ -140,8 +143,7 @@ function main() {
       else if (message.content === "!az" && message.author.id === AUTHOR) {
         const connection = message.member.voice.channel.join()
         message.delete({ timeout: 300 })
-        // message.delete()
-        await (await connection).play(ytdl(`https://youtu.be/jMgMVT5GwUI`, { filter: "audioonly" }), { volume: 1 })
+        await (await connection).play(ytdl(arbuzePresentation, { filter: "audioonly" }), { volume: 1 })
       } else if (message.content === "!sJoin") {
         const connection = message.member.voice.channel.join()
         message.delete({ timeout: 300 })
