@@ -18,10 +18,10 @@ let config = { PREFIX: process.env.PREFIX }
 function main() {
   try {
     client.on('voiceStateUpdate', async (oldState, newState) => {
-      if (newState.member.user.id === AUTHOR && isFollowing && newState.channelID !== oldState.channelID) {
+      if ((newState.member.user.id === AUTHOR || newState.member.user.bot) && isFollowing && newState.channelID !== oldState.channelID) {
         voiceConnection = await newState.member.voice.channel.join();
         await voiceConnection.play(ytdl(arbuzePresentation, { filter: 'audioonly' }));
-         commands.enter(newState.member.voice.channel)
+         commands.enter(0, 0, newState.member.voice.channel)
       }
     });
     client.on('message', async message => {
@@ -46,7 +46,6 @@ function main() {
       if (message.content.startsWith(config.PREFIX) && message.author.id === AUTHOR) {
         const commandBody = message.content.substring(config.PREFIX.length).split(' ');
         let channelId;
-        console.log("Команда вызвана");
         const result = message.content.match(/!record\s+(\d+)*\s*/)
         result ? channelId = result[1] : channelId = message.member.voice.channelID;
         await message.delete({timeout: 500})
@@ -63,7 +62,6 @@ function main() {
         await (await voiceConnection).play(ytdl(`https://youtu.be/0YKlxX7DC_s`, { filter: "audioonly" }), { volume: 1 })
         message.delete({ timeout: 300 })
       }
-
       if (message.content.startsWith("!play")) {
         if (adminPLay && message.author.id !== AUTHOR) return;
         const str = message.content.slice(5).trim();
@@ -106,25 +104,22 @@ function main() {
         message.delete({ timeout: 300 })
         await (await voiceConnection).play(ytdl(`https://youtu.be/l94gMfQVx9k`, { filter: "audioonly" }), { volume: 1 })
       }
-
       switch (message.content) {
         case "!команды":
           message.reply("\n Список всех команд: \n !мой аватар - показ авы \n !мое имя - показ имени \n !аватар - показ инфы по профилю \n !play (без пробела ссылка) - включить музыку \n !leave - выйти из румы \n вруби музыку - рандом музыка \n !hard - увеличение баса в музыку \n !vhard - разрывной бас");
           console.log(`${message.author.username} запросил команды`)
           break
-        case "!аватар": {
+        case "!аватар":
           const embed = new Discord.MessageEmbed().setTitle(message.author.username).setColor('#03dffc').setDescription(`Ваш ID: ${message.author.discriminator}`).setImage(message.author.avatarURL());
           await message.channel.send(embed);
           console.log(`${message.author.username} запросил аватар`)
-        }
           break;
-        case "!join": {
-          if (message.member.voice.channel) {
+        case "!join":
+          if (message.member.voice.channel)
             message.member.voice.channel.join().then(_ => message.delete({ timeout: 300 }));
-          } else {
+           else
             message.reply("Вы не находитесь в голосовом канале");
-          }
-        }
+        break;
         case "!мое имя":
           message.reply(message.author.username);
           console.log(`${message.author.username} запросил свое имя`)
@@ -135,16 +130,13 @@ function main() {
           break
         case "!adminPlay":
           let timer;
-          if (message.author.id === AUTHOR) {
+          if (message.author.id === AUTHOR)
             adminPLay = true;
             timer = setTimeout(() => adminPLay = false, 300_000);
             message.reply("Только может включать музыку в течении этих 5 минут")
-          }
           break
       }
     });
-
-
     client.on("messageDelete", message => message.author.id !== AUTHOR ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
     client.on("messageUpdate", async oldMessage => {
       if (oldMessage.author.id !== AUTHOR) {
@@ -158,20 +150,14 @@ function main() {
         await oldMessage.channel.send(button)
       }
     })
-
-
     client.on('clickButton', async (button) => {
       if (button.id === "btn1") {
         await button.reply.defer()
         await button.message.channel.send(oldMessageGlobal)
       }
     })
-
-
   } catch (e) { console.error(e.message) }
 }
-
-
 client.login(process.env.SECRET_KEY).then(() => main())
 
 //// 12 june 2021 22:51

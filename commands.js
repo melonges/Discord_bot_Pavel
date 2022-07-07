@@ -5,8 +5,7 @@ const createNewChunk = () => {
   return fs.createWriteStream(pathToFile);
 };
 
-exports.enter = function(voiceConnection = 0, msg, channelId) {
-    console.log(voiceConnection)
+exports.enter = function(msg, channelId, voiceConnection = 0) {
     let voiceChannel
     if (!fs.existsSync("./recordings")) fs.mkdirSync("./recordings");
 if (voiceConnection)
@@ -25,10 +24,10 @@ else
       const receiver = conn.receiver;
       conn.on('speaking', (user, speaking) => {
         if (speaking) {
-          console.log(`${user.username} started speaking`);
+          // console.log(`${user.username} started speaking`);
           const audioStream = receiver.createStream(user, { mode: 'pcm' });
           audioStream.pipe(createNewChunk());
-          audioStream.on('end', () => { console.log(`${user.username} stopped speaking`); });
+          // audioStream.on('end', () => { console.log(`${user.username} stopped speaking`); });
         }
       });
     })
