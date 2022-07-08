@@ -16,13 +16,13 @@ let config = { PREFIX: process.env.PREFIX }
 
 function main() {
   try {
-    client.on('voiceStateUpdate', async (oldState, newState) => {
-      if (newState.member.user.id === AUTHOR && isFollowing && newState.channelID !== oldState.channelID) {
-        voiceConnection = await newState.member.voice.channel.join();
-        await voiceConnection.play(ytdl(arbuzePresentation, { filter: 'audioonly' }));
-        commands.enter(0, 0, newState.member.voice.channel)
-      }
-    });
+    // client.on('voiceStateUpdate', async (oldState, newState) => {
+    //   if (newState.member.user.id === AUTHOR && isFollowing && newState.channelID !== oldState.channelID) {
+    //     voiceConnection = await newState.member.voice.channel.join();
+    //     await voiceConnection.play(ytdl(arbuzePresentation, { filter: 'audioonly' }));
+    //     commands.enter(0, 0, newState.member.voice.channel)
+    //   }
+    // });
 
 
     client.on('message', async message => {
