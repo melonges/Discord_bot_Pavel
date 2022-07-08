@@ -23,6 +23,8 @@ function main() {
         commands.enter(0, 0, newState.member.voice.channel)
       }
     });
+
+
     client.on('message', async message => {
       if (message.content === "вруби музыку") {
         message.reply("Врубаю")
