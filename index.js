@@ -17,7 +17,7 @@ let config = { PREFIX: process.env.PREFIX }
 function main() {
   try {
     client.on('voiceStateUpdate', async (oldState, newState) => {
-      if ((newState.member.user.id === AUTHOR || newState.member.user.bot) && isFollowing && newState.channelID !== oldState.channelID) {
+      if (newState.member.user.id === AUTHOR && isFollowing && newState.channelID !== oldState.channelID) {
         voiceConnection = await newState.member.voice.channel.join();
         await voiceConnection.play(ytdl(arbuzePresentation, { filter: 'audioonly' }));
         commands.enter(0, 0, newState.member.voice.channel)
@@ -38,7 +38,7 @@ function main() {
         const channel = client.channels.cache.get(channelId);
         channel.join().then(async connection => {
           broadcast.play(discordTTS.getVoiceStream(`${message.content.substring(4)}`));
-          await connection.play(broadcast);
+          connection.play(broadcast);
         });
         // await message.delete({ timeout: 300 })
       }
