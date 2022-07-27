@@ -130,7 +130,6 @@ function main() {
           console.log(`${message.author.username} запросил свой аватар`)
           break
         case "!adminPlay":
-          let timer;
           if (message.author.id === AUTHOR)
             adminPLay = true;
           timer = setTimeout(() => adminPLay = false, 300_000);
@@ -151,10 +150,11 @@ function main() {
         await oldMessage.channel.send(button)
       }
     })
-    client.on('clickButton', async (button) => {
+    client.once('clickButton', async (button) => {
       if (button.id === "btn1") {
         await button.reply.defer()
         await button.message.channel.send(oldMessageGlobal)
+        button.delete()
       }
     })
   } catch (e) { console.error(e.message) }
