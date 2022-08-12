@@ -4,7 +4,7 @@ const ytdl = require('ytdl-core')
 require('dotenv').config()
 const AUTHOR = "336516852995850241"
 let adminPLay = false;
-
+let recentlyMovedUser = false
 // // logging when user joins/leaves voice channel
 // client.on('voiceStateUpdate', (oldMember, newMember) => {
 //     if (oldMember.voice.channel && !newMember.voice.channel) {
@@ -17,7 +17,7 @@ let adminPLay = false;
 
 
 function main() {
-  let recentlyDeletedMessageByBot = false;
+
   try {
     client.on('message', async message => {
       if (message.author.id === AUTHOR) await message.react("👍")
@@ -40,6 +40,7 @@ function main() {
           } else {
             message.reply("Вы не находитесь в голосовом канале");
           }
+          break
         }
         case "!мое имя":
           message.reply(message.author.username);
@@ -50,7 +51,6 @@ function main() {
           console.log(`${message.author.username} запросил свой аватар`)
           break
         case "!adminPlay":
-          let timer;
           if (message.author.id === AUTHOR) {
             adminPLay = true;
             timer = setTimeout(() => adminPLay = false, 300_000);
@@ -85,7 +85,10 @@ function main() {
       }
     })
 
-    client.on("messageDelete", message => message.author.id !== AUTHOR || !recentlyDeletedMessageByBot ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
+    client.on("messageDelete", message => {
+      console.log(recentlyMovedUser)
+      message.author.id !== AUTHOR && !recentlyMovedUser ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0
+    });
 
     client.on("message", async message => {
       if (message.content === "вруби музыку") {
@@ -155,7 +158,7 @@ async function moveUser(message) {
   const member = message.guild.members.cache.get(result[2]);
   const channel = message.guild.channels.cache.get(result[1]);
   await member.voice.setChannel(channel);
-  recentlyDeletedMessageByBot = true
-  setTimeout(() => recentlyDeletedMessage = false, 800)
+  recentlyMovedUser = true
   message.delete({ timeout: 300 })
+  setTimeout(() => recentlyMovedUser = false, 1000)
 }
