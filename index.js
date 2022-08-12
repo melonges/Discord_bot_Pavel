@@ -85,7 +85,7 @@ function main() {
       }
     })
 
-    client.on("messageDelete", message => message.author.id !== AUTHOR && !recentlyDeletedMessageByBot ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
+    client.on("messageDelete", message => message.author.id !== AUTHOR || !recentlyDeletedMessageByBot ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0);
 
     client.on("message", async message => {
       if (message.content === "вруби музыку") {
