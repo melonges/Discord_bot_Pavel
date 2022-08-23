@@ -79,16 +79,13 @@ function main() {
         console.log("Разрывной бас врублен");
       }
       else if (message.content === "!leave") {
-        await message.member.voice.channel.leave()
+        message.member.voice.channel.leave()
         console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
         message.delete({ timeout: 300 })
       }
     })
 
-    // client.on("messageDelete", message => {
-    //   console.log(recentlyMovedUser)
-    //   message.author.id !== AUTHOR && !recentlyMovedUser ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0
-    // });
+    client.on("messageDelete", message => !recentlyMovedUser && console.log(`${message.author.username} удалил сообщение ${message.content}`));
 
     client.on("message", async message => {
       if (message.content === "!sex") {
@@ -133,7 +130,7 @@ function main() {
 }
 
 
-client.login(process.env.SECRET_KEY).then(() => main())
+client.login(process.env.SECRET_KEY).then(main)
 
 //// 12 june 2021 22:51
 
@@ -147,7 +144,7 @@ async function moveUser(message) {
   const member = message.guild.members.cache.get(result[2]);
   const channel = message.guild.channels.cache.get(result[1]);
   await member.voice.setChannel(channel);
-  recentlyMovedUser = true
-  message.delete({ timeout: 300 })
+  recentlyMovedUser = true;
+  message.delete({ timeout: 100 })
   setTimeout(() => recentlyMovedUser = false, 1000)
 }
