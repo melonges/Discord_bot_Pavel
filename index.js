@@ -85,21 +85,10 @@ function main() {
       }
     })
 
-    client.on("messageDelete", message => {
-      console.log(recentlyMovedUser)
-      message.author.id !== AUTHOR && !recentlyMovedUser ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0
-    });
-
-    client.on("message", async message => {
-      if (message.content === "вруби музыку") {
-        message.reply("Врубаю")
-        const connection = message.member.voice.channel.join();
-        console.log(`Зашел в комнату ${message.member.voice.channel.id}`);
-        await (await connection).play(ytdl(`https://www.youtube.com/watch?v=Qp3YBgeLULQ`, { filter: "audioonly" }), { volume: 1 });
-      }
-    })
-
-
+    // client.on("messageDelete", message => {
+    //   console.log(recentlyMovedUser)
+    //   message.author.id !== AUTHOR && !recentlyMovedUser ? message.reply(`Вы удалили сообщение "${message.content}"`) : 0
+    // });
 
     client.on("message", async message => {
       if (message.content === "!sex") {
