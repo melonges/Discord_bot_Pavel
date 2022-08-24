@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const banList = require("./banlist.json");
 const ytdl = require('ytdl-core')
 require('dotenv').config()
 const AUTHOR = "336516852995850241"
@@ -17,11 +18,11 @@ let recentlyMovedUser = false
 
 
 function main() {
-
   try {
     client.on('message', async message => {
+      if (message.content.startsWith('!move')) { await moveUser(message); return} 
+      if (banList.includes(message.author.id)) return;
       if (message.author.id === AUTHOR) await message.react("👍")
-      if (message.content.startsWith('!move')) await moveUser(message);
       logger(message);
       switch (message.content) {
         case "!команды":
@@ -58,36 +59,41 @@ function main() {
           }
           break
       }
+
+    if (message.content.startsWith("!play")) {
+      if (adminPLay && message.author.id !== AUTHOR) return;
+      const str = message.content.slice(5).trim();
+      const connection = message.member.voice.channel.join();
+      (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 1 });
+    } else if (message.content.startsWith("!hard")) {
+      const str = message.content.slice(5).trim();
+      console.log(str);
+      const connection = message.member.voice.channel.join();
+      const playingMusic = (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 40 });
+    } else if (message.content.startsWith("!vHard")) {
+      const str = message.content.slice(6).trim();
+      console.log(str);
+      const connection = message.member.voice.channel.join();
+      const playingMusic = (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 90 });
+      console.log("Разрывной бас врублен");
+    }
+    else if (message.content === "!leave") {
+      message.member.voice.channel.leave()
+      console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
+      message.delete({ timeout: 300 })
+    } else if (message.content.startsWith("!ban") && message.author.id == AUTHOR) {
+      const id  = message.content.slice(4).trim()
+      file.banned.push(id);
+      fs.writeFile("./banlist.json", JSON.stringify(file), (err) => {
+        if (err) console.error(err);
+        else message.delete({ timeout: 300 })
+      })
+    }
+
+    client.on("messageDelete", message => {
+      !recentlyMovedUser && console.log(`${message.author.username} удалил сообщение ${message.content}`)
     });
 
-    client.on("message", async function voiceF(message) {
-      if (message.content.startsWith("!play")) {
-        if (adminPLay && message.author.id !== AUTHOR) return;
-        const str = message.content.slice(5).trim();
-        const connection = message.member.voice.channel.join();
-        (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 1 });
-      } else if (message.content.startsWith("!hard")) {
-        const str = message.content.slice(5).trim();
-        console.log(str);
-        const connection = message.member.voice.channel.join();
-        const playingMusic = (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 40 });
-      } else if (message.content.startsWith("!vHard")) {
-        const str = message.content.slice(6).trim();
-        console.log(str);
-        const connection = message.member.voice.channel.join();
-        const playingMusic = (await connection).play(ytdl(`${str}`, { filter: "audioonly" }), { volume: 90 });
-        console.log("Разрывной бас врублен");
-      }
-      else if (message.content === "!leave") {
-        message.member.voice.channel.leave()
-        console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
-        message.delete({ timeout: 300 })
-      }
-    })
-
-    client.on("messageDelete", message => !recentlyMovedUser && console.log(`${message.author.username} удалил сообщение ${message.content}`));
-
-    client.on("message", async message => {
       if (message.content === "!sex") {
         const connection = message.member.voice.channel.join()
         message.delete({ timeout: 300 })
@@ -120,31 +126,29 @@ function main() {
       }
 
     })
-
-
-
-
   } catch (e) {
-    console.error(e.message)
+    console.error(e)
   }
-}
 
 
-client.login(process.env.SECRET_KEY).then(main)
 
-//// 12 june 2021 22:51
 
-function logger(message) {
-  console.log(`${message.author.username}: ${message.content}`);
-}
+  client.login(process.env.SECRET_KEY).then(main).then("Бот запущен");
 
-async function moveUser(message) {
-  const result = message.content.match(/!move\s+(\d+)*\s*/)
-  message.mentions.users.size ? result[2] = message.mentions.users.first().id : result[2] = message.author.id
-  const member = message.guild.members.cache.get(result[2]);
-  const channel = message.guild.channels.cache.get(result[1]);
-  await member.voice.setChannel(channel);
-  recentlyMovedUser = true;
-  message.delete({ timeout: 100 })
-  setTimeout(() => recentlyMovedUser = false, 1000)
+  //// 12 june 2021 22:51
+
+  function logger(message) {
+    console.log(`${message.author.username}: ${message.content}`);
+  }
+
+  async function moveUser(message) {
+    const result = message.content.match(/!move\s+(\d+)*\s*/)
+    message.mentions.users.size ? result[2] = message.mentions.users.first().id : result[2] = message.author.id
+    const member = message.guild.members.cache.get(result[2]);
+    const channel = message.guild.channels.cache.get(result[1]);
+    await member.voice.setChannel(channel);
+    recentlyMovedUser = true;
+    message.delete({ timeout: 100 })
+    setTimeout(() => recentlyMovedUser = false, 1000)
+  }
 }
