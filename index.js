@@ -32,10 +32,10 @@ function main() {
     
     client.on('message', async message => {
       const banList = require('./banList.json')
+      logger(message);
       if (banList.banned.includes(message.author.id)) return;
       if (message.content.startsWith('!move')) { await moveUser(message); return }
       if (message.author.id === AUTHOR) await message.react("👍")
-      logger(message);
       switch (message.content) {
         case "!команды":
           message.reply("\n Список всех команд: \n !мой аватар - показ авы \n !мое имя - показ имени \n !аватар - показ инфы по профилю \n !play (без пробела ссылка) - включить музыку \n !leave - выйти из румы \n вруби музыку - рандом музыка \n !hard - увеличение баса в музыку \n !vhard - разрывной бас");
@@ -94,6 +94,7 @@ function main() {
         console.log(`вышел из комнаты ${message.member.voice.channel.id}`)
         message.delete({ timeout: 300 })
       } else if (message.content.startsWith("!ban") && message.author.id == AUTHOR) {
+        
         const id = message.content.slice(4).trim()
         const banList = require('./banlist.json')
         banList.banned.push(id)
@@ -102,7 +103,6 @@ function main() {
           else message.delete({ timeout: 300 })
         })
       }
-
       
 
       if (message.content === "!sex") {
