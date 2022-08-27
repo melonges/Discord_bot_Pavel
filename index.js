@@ -188,7 +188,9 @@ message.channel.send(button1)
 
 
   client.on("clickButton", async (button) => {
+    try {
       const connection = button.clicker.member.voice.channel.join()
+      button.inte
     if (button.id === "wow")
       (await connection).play("./wow.mp3", { volume: 2 })
     else if (button.id === "wow_pip")
@@ -196,5 +198,7 @@ message.channel.send(button1)
         else if (button.id === "kry")
         (await connection).play("./kry.mp3", { volume: 2 })
       button.intera
-    })
-}
+  } catch (e) {
+    message.delete({ timeout: 100 })
+  }
+})}
