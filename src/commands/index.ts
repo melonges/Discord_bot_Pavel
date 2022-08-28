@@ -1,15 +1,13 @@
-const { SlashCommandBuilder, Routes } = require('discord.js');
-const { REST } = require('@discordjs/rest');
-const { clientId, guildId, token } = require('./config.json');
+import { Message } from 'discord.js';
+import logger from '../ults/logger';
 
-const commands = [
-  new SlashCommandBuilder().setName('ping').setDescription('Replies with pong!'),
-  new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
-  new SlashCommandBuilder().setName('user').setDescription('Replies with user info!'),
-].map(command => command.toJSON());
+class MainCommands {
+  private readonly message: Message;
 
-const rest = new REST({ version: '10' }).setToken(token);
+  constructor(message: Message) {
+    this.message = message;
+    logger(message);
+  }
+}
 
-rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-  .then(() => console.log('Successfully registered application commands.'))
-  .catch(console.error);
+export default MainCommands;

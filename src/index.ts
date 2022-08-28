@@ -1,33 +1,23 @@
-require('dotenv').config();
-import Discord, { Message } from 'discord.js';
+import getBanList from './ults/getBanList';
+import Discord from 'discord.js';
 import { createAudioPlayer, createAudioResource } from '@discordjs/voice';
-// import { MessageButton } from 'discord-buttons-fixed';
-import fs from 'fs';
-import path from "path";
+import MainCommands from './commands';
 
+require('dotenv').config();
 
 if (!process.env.SECRET_KEY) {
   console.log('FUCK YOU, create .env file in root directory of project, and write = \'SECRET_KEY=YOURTOKEN\'');
   process.exit();
 }
 
-function getBanList() {
-  const banListPath = path.resolve(__dirname, './banlist.json')
-  try {
-    return JSON.parse(fs.readFileSync(banListPath).toString());
-  } catch (e) {
-    console.error('Error caused in getBanList restarting function', e);
-    fs.writeFileSync(banListPath, '[]');
-    getBanList();
-  }
-}
+// logger
+// console.log(`${message.author.username}: ${message.content}`);
 
 const banList = getBanList();
-
 const client = new Discord.Client();
 
 // Variables
-const AUTHOR = '336516852995850241';
+const AUTHORS = ['336516852995850241', '925765821937098802'];
 let adminPLay = false;
 let recentlyMovedUser = false;
 const player = createAudioPlayer();
@@ -46,6 +36,10 @@ const resource = createAudioResource('./assets/sounds/sgu.mp3');
 function main() {
   try {
     console.log('DJ Pavel has been started!');
+
+    client.on('message', message => {
+      new MainCommands(message);
+    });
   } catch (e) {
     console.error(e);
   }
@@ -167,14 +161,6 @@ function main() {
   // }
 }
 
-
-client.login(process.env.SECRET_KEY).then(main).catch(console.error);
-
-//// 12 june 2021 22:51
-function logger(message: Message) {
-  console.log(`${message.author.username}: ${message.content}`);
-}
-
 // async function moveUser(message) {
 //   const result = message.content.match(/!move\s+(\d+)*\s*/);
 //   message.mentions.users.size ? result[2] = message.mentions.users.first().id : result[2] = message.author.id;
@@ -222,3 +208,5 @@ function logger(message: Message) {
 //     }
 //   });
 // }
+
+client.login(process.env.SECRET_KEY).then(main).catch(console.error);
