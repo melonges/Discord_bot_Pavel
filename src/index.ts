@@ -38,6 +38,7 @@ function main() {
     client.on('messageDelete', message => {
       if (message!.author!.bot) return;
       if (MainCommands.recentlyDeletedMessageByBot) return;
+      if (message.author?.bot) return;
       logger(message as Message, `${message.author?.username} удалил сообщение ${message.content}`);
     });
 
