@@ -1,0 +1,3 @@
+{
+  "ignore": ["src/banlist.json", "dist/banlist.json"]
+}

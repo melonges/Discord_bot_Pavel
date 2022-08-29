@@ -2,6 +2,8 @@ import Discord, { Message } from 'discord.js';
 import { createAudioPlayer, createAudioResource } from '@discordjs/voice';
 import MainCommands from './commands';
 import logger from './ults/logger';
+import { CustomMessage } from './types/Message';
+import getBanList from './ults/getBanList';
 
 require('dotenv').config();
 
@@ -10,10 +12,11 @@ if (!process.env.SECRET_KEY) {
   process.exit();
 }
 
+getBanList()
+
 const client = new Discord.Client();
 
 // Variables
-const AUTHORS = ['336516852995850241', '925765821937098802'];
 let adminPLay = false;
 let recentlyMovedUser = false;
 const player = createAudioPlayer();
@@ -37,52 +40,18 @@ function main() {
       logger(message as Message, `${message.author?.username} удалил сообщение ${message.content}`);
     });
 
-    client.on('message', message => {
-      new MainCommands(message);
+    client.on('message', (message ) => {
+      (message as CustomMessage).isAuthor = ['336516852995850241', '925765821937098802'].includes(message.author.id);
+      new MainCommands(message as CustomMessage);
     });
   } catch (e) {
     console.error(e);
   }
 }
 
-// try {
-//   console.log('Bot is online');
-
 //
 //   client.on('message', async message => {
-//     logger(message);
-//     if (message.content.startsWith('!move')) {
-//       await moveUser(message);
-//       return;
-//     }
-//     if (message.author.id === AUTHOR) await message.react('👍');
 //     switch (message.content) {
-//       case '!команды':
-//         message.reply('\n Список всех команд: \n !мой аватар - показ авы \n !мое имя - показ имени \n !аватар - показ инфы по профилю \n !play (без пробела ссылка) - включить музыку \n !leave - выйти из румы \n вруби музыку - рандом музыка \n !hard - увеличение баса в музыку \n !vhard - разрывной бас');
-//         console.log(`${message.author.username} запросил команды`);
-//         break;
-//       case '!аватар': {
-//         const embed = new Discord.MessageEmbed().setTitle(message.author.username).setColor('#03dffc').setDescription(`Ваш ID: ${message.author.discriminator}`).setImage(message.author.avatarURL());
-//         await message.channel.send(embed);
-//         console.log(`${message.author.username} запросил аватар`);
-//       }
-//         break;
-//       case '!join': {
-//         if (message.member.voice.channel) {
-//           message.member.voice.channel.join().then(_ => message.delete({ timeout: 300 }));
-//         } else {
-//           message.reply('Вы не находитесь в голосовом канале');
-//         }
-//         break;
-//       }
-//       case '!мое имя':
-//         message.reply(message.author.username);
-//         console.log(`${message.author.username} запросил свое имя`);
-//         break;
-//       case '!мой аватар':
-//         message.reply(message.author.avatarURL()), console.log(message);
-//         console.log(`${message.author.username} запросил свой аватар`);
-//         break;
 //       case '!adminPlay':
 //         if (message.author.id === AUTHOR) {
 //           adminPLay = true;
@@ -92,35 +61,16 @@ function main() {
 //         break;
 //     }
 //
-//     if (message.content.startsWith('!play')) {
-//       if (adminPLay && message.author.id !== AUTHOR) return;
-//       const str = message.content.slice(5).trim();
-//       const connection = message.member.voice.channel.join();
-//       (await connection).play(ytdl(`${str}`, { filter: 'audioonly' }), { volume: 1 });
 //     } else if (message.content.startsWith('!hard')) {
-//       const str = message.content.slice(5).trim();
-//       console.log(str);
-//       const connection = message.member.voice.channel.join();
-//       const playingMusic = (await connection).play(ytdl(`${str}`, { filter: 'audioonly' }), { volume: 40 });
+
 //     } else if (message.content.startsWith('!vHard')) {
-//       const str = message.content.slice(6).trim();
-//       console.log(str);
-//       const connection = message.member.voice.channel.join();
-//       const playingMusic = (await connection).play(ytdl(`${str}`, { filter: 'audioonly' }), { volume: 90 });
-//       console.log('Разрывной бас врублен');
+//
 //     } else if (message.content === '!leave') {
-//       message.member.voice.channel.leave();
-//       console.log(`вышел из комнаты ${message.member.voice.channel.id}`);
-//       message.delete({ timeout: 300 });
 //     } else if (message.content.startsWith('!ban') && message.author.id == AUTHOR) {
 //
 //       const id = message.content.slice(4).trim();
 //       const banList = require('./banlist.json');
-//       banList.banned.push(id);
-//       fs.writeFile('./banlist.json', JSON.stringify(banList), (err) => {
-//         if (err) console.error(err);
-//         else message.delete({ timeout: 300 });
-//       });
+
 //     }
 //
 //

@@ -2,7 +2,9 @@ import path from 'path';
 import fs from 'fs';
 
 function getBanList(): undefined | string[] {
-  const banListPath = path.resolve(__dirname, './banlist.json');
+  const rootPath = path.resolve(__dirname, "../")
+  console.log(rootPath)
+  const banListPath = path.resolve(rootPath, 'banlist.json');
   try {
     return JSON.parse(fs.readFileSync(banListPath).toString());
   } catch (e) {
