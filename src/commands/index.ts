@@ -112,7 +112,7 @@ ${commandsHandler.map(command => {
 
   private static async playAudio(message: CustomMessage, url: string, volume = 1) {
     const connection = message.member!.voice.channel!.join();
-    (await connection).play(ytdl(`${url}`, { filter: 'audioonly' }), { volume: 1 });
+    (await connection).play(ytdl(`${url}`, { filter: 'audioonly' }), { volume });
   }
 
   @Command('play', 'ДЭНЦ ДЭНЦ ДЭНЦ')
@@ -150,12 +150,12 @@ ${commandsHandler.map(command => {
 
   @Command('sex', 'ох шит ай сории, сорри фор ват?')
   async sex(message: CustomMessage) {
-    MainCommands.playAudio(message, 'https://youtu.be/rK-iOXgPKZU');
+    await MainCommands.playAudio(message, 'https://youtu.be/rK-iOXgPKZU');
   }
 
   @Command('хохол', 'шеее ре вмерле украииииинум')
   async hohol(message: CustomMessage) {
-    MainCommands.playAudio(message, 'https://youtu.be/0YKlxX7DC_s');
+    await MainCommands.playAudio(message, 'https://youtu.be/0YKlxX7DC_s');
   }
 
   // @Command('СГУ', 'я хуй знает шо це таке')
@@ -197,7 +197,7 @@ ${commandsHandler.map(command => {
     await MainCommands.playAudio(message, 'https://youtu.be/AY7LPwk3lE4');
   }
 
-  @Command('lJoin', 'Я хуй знает')
+  @Command('ljoin', 'Я хуй знает')
   async lJoin(message: CustomMessage) {
     await MainCommands.playAudio(message, 'https://youtu.be/l94gMfQVx9k');
   }
