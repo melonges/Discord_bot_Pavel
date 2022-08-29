@@ -36,6 +36,8 @@ function main() {
     console.log('DJ Pavel has been started!');
 
     client.on('messageDelete', message => {
+      if (message!.author!.bot) return;
+      if (MainCommands.recentlyDeletedMessageByBot) return;
       logger(message as Message, `${message.author?.username} удалил сообщение ${message.content}`);
     });
 
@@ -44,19 +46,15 @@ function main() {
       new MainCommands(message as CustomMessage);
     });
 
-    // client.on('clickButton', async (button) => {
-    //   try {
-    //     const connection = button.clicker.member.voice.channel!.join();
-    //     if (button.id === 'wow')
-    //       (await connection).play('./assets/sounds/wow.mp3', { volume: 2 });
-    //     else if (button.id === 'wow_pip')
-    //       (await connection).play('./assets/sounds/wow_pip.mp3', { volume: 2 });
-    //     else if (button.id === 'kry')
-    //       (await connection).play('./assets/sounds/kry.mp3', { volume: 2 });
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // });
+    client.on('clickButton', async (button) => {
+        const connection = button.clicker.member.voice.channel!.join();
+        if (button.id === 'wow')
+          (await connection).play('./assets/sounds/wow.mp3', { volume: 2 });
+        else if (button.id === 'wow_pip')
+          (await connection).play('./assets/sounds/wow_pip.mp3', { volume: 2 });
+        else if (button.id === 'kry')
+          (await connection).play('./assets/sounds/kry.mp3', { volume: 2 });
+    });
   } catch (e) {
     console.error(e);
   }

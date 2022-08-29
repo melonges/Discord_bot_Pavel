@@ -24,19 +24,15 @@ class MainCommands {
   private readonly message: CustomMessage;
   private readonly commandsPrefix: string;
   private banList: string[] = [];
+  static recentlyDeletedMessageByBot = false;
 
   constructor(message: CustomMessage, prefix: string = '!') {
     logger(message);
-
-    if (message.isAuthor) {
-      message.react('👍');
-    }
-
+    getBanList().then(banList => this.banList = banList!)
     this.message = message;
     this.commandsPrefix = prefix;
-    this.banList = getBanList()!;
-
     if (this.banList.includes(message.author.id)) return;
+
 
     const messageArgs = this.message.content.split(' ').filter(v => !v.startsWith('!'));
 
@@ -45,10 +41,16 @@ class MainCommands {
         command.handler(message, ...messageArgs);
       }
     }
+    if (message.isAuthor)
+      message.react('👍');
+
   }
 
   private static async deleteMessage(message: CustomMessage, timeout = 100) {
-    await message.delete({ timeout });
+
+    await message.delete({timeout});
+    this.recentlyDeletedMessageByBot = true;
+    setTimeout(() => this.recentlyDeletedMessageByBot = false, 500);
   }
 
   private matchCommand(candidate: string) {
@@ -138,9 +140,9 @@ ${commandsHandler.map(command => {
 
   @Command('ban', 'БАН НАХУЙ')
   async ban(message: CustomMessage, userId: string) {
-    const banList = getBanList()!;
-    if (message.isAuthor && userId && userId !== message.author.id && !banList.includes(userId)) {
-      banList.push(userId);
+    const banList = await getBanList();
+    if (message.isAuthor && userId && userId !== message.author.id && !banList!.includes(userId)) {
+      banList!.push(userId);
       fs.writeFile(pathResolve(__dirname, '../banlist.json'), JSON.stringify(banList), (err) => {
         if (err) console.error(err);
         else message.delete({ timeout: 100 });
