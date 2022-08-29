@@ -116,8 +116,8 @@ ${commandsHandler.map(command => {
   }
 
   @Command('play', 'ДЭНЦ ДЭНЦ ДЭНЦ')
-  async play(message: CustomMessage, url: string) {
-    await MainCommands.playAudio(message, url);
+  async play(message: CustomMessage, url: string, volume="1") {
+    await MainCommands.playAudio(message, url, parseInt(volume));
   }
 
   @Command('hard', 'БОЛЕЕ ГРОМКИЙ ДЭНЦ ДЭНЦ ДЭНЦ')
