@@ -47,7 +47,7 @@ class MainCommands {
     }
   }
 
-  private async deleteMessage(message: CustomMessage, timeout = 100) {
+  private static async deleteMessage(message: CustomMessage, timeout = 100) {
     await message.delete({ timeout });
   }
 
@@ -74,7 +74,7 @@ class MainCommands {
     } catch (e) {
       console.log(e);
     }
-    await this.deleteMessage(message);
+    await MainCommands.deleteMessage(message);
   }
 
   @Command(['команды', 'help'], 'просмотр всех доступных команд')
@@ -104,30 +104,30 @@ ${commandsHandler.map(command => {
   async join(message: CustomMessage) {
     if (message.member?.voice.channel) {
       await message.member?.voice.channel.join();
-      await this.deleteMessage(message);
+      await MainCommands.deleteMessage(message);
     } else {
       await message.reply('Вы не находитесь в голосовом канале');
     }
   }
 
-  private async playAudio(message: CustomMessage, url: string, volume = 1) {
+  private static async playAudio(message: CustomMessage, url: string, volume = 1) {
     const connection = message.member!.voice.channel!.join();
     (await connection).play(ytdl(`${url}`, { filter: 'audioonly' }), { volume: 1 });
   }
 
   @Command('play', 'ДЭНЦ ДЭНЦ ДЭНЦ')
   async play(message: CustomMessage, url: string) {
-    await this.playAudio(message, url);
+    await MainCommands.playAudio(message, url);
   }
 
   @Command('hard', 'БОЛЕЕ ГРОМКИЙ ДЭНЦ ДЭНЦ ДЭНЦ')
   async hard(message: CustomMessage, url: string) {
-    await this.playAudio(message, url, 40);
+    await MainCommands.playAudio(message, url, 40);
   }
 
   @Command('vhard', 'ЕБЕЙШЕ КАКОЙ ДЭНЦ ДЭНЦ ДЭНЦ')
   async vhard(message: CustomMessage, url: string) {
-    await this.playAudio(message, url, 90);
+    await MainCommands.playAudio(message, url, 90);
   }
 
   // @Command('leave', 'выход из голосового чата')
@@ -146,6 +146,60 @@ ${commandsHandler.map(command => {
         else message.delete({ timeout: 100 });
       });
     }
+  }
+
+  @Command('sex', 'ох шит ай сории, сорри фор ват?')
+  async sex(message: CustomMessage) {
+    MainCommands.playAudio(message, 'https://youtu.be/rK-iOXgPKZU');
+  }
+
+  @Command('хохол', 'шеее ре вмерле украииииинум')
+  async hohol(message: CustomMessage) {
+    MainCommands.playAudio(message, 'https://youtu.be/0YKlxX7DC_s');
+  }
+
+  // @Command('СГУ', 'я хуй знает шо це таке')
+  // async SGU(message: CustomMessage) {
+  //   const button1 = new MessageButton()
+  //     .setStyle('red')
+  //     .setLabel('визжалка')
+  //     .setID('wow');
+  //   const button2 = new MessageButton()
+  //     .setStyle('red')
+  //     .setLabel('туда-сюда')
+  //     .setID('wow_pip');
+  //   const button3 = new MessageButton()
+  //     .setStyle('red')
+  //     .setLabel('Крякалка')
+  //     .setID('kry');
+  //
+  //
+  //   await message.channel.send({ buttons: [button1, button2, button3] });
+  // }
+
+  @Command('ogloc', 'ИТС ОУДЖИ ЛОК ХОУМИ')
+  async ogloc(message: CustomMessage) {
+    await MainCommands.playAudio(message, 'https://youtu.be/ikSV1DYTxXU');
+  }
+
+  @Command('az', 'как говориться аззазазаза затролил лалку')
+  async az(message: CustomMessage) {
+    await MainCommands.playAudio(message, 'https://youtu.be/jMgMVT5GwUI');
+  }
+
+  @Command('sjoin', 'JOIN TIMES')
+  async sJoin(message: CustomMessage) {
+    await MainCommands.playAudio(message, 'https://youtu.be/4whEYvJTuxc');
+  }
+
+  @Command('sleave', 'LEAVE TIMES')
+  async sLeave(message: CustomMessage) {
+    await MainCommands.playAudio(message, 'https://youtu.be/AY7LPwk3lE4');
+  }
+
+  @Command('lJoin', 'Я хуй знает')
+  async lJoin(message: CustomMessage) {
+    await MainCommands.playAudio(message, 'https://youtu.be/l94gMfQVx9k');
   }
 }
 
