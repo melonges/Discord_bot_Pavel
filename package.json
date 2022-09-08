@@ -22,7 +22,7 @@
     "build": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "Terminaate",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.7.13",
