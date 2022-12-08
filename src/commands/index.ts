@@ -5,17 +5,34 @@ import { MessageEmbed } from 'discord.js';
 import ytdl from 'ytdl-core';
 import fs from 'fs';
 import { resolve as pathResolve } from 'path';
+import { Recorder } from '../voice-recorder/Recorder';
 
-export const commandsHandler: { name: string, description?: string, handler: Function }[] = [];
+export const commandsHandler: {
+  name: string;
+  description?: string;
+  handler: Function;
+}[] = [];
 
 export function Command(command: string | string[], description = '') {
-  return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor,
+  ) {
     if (Array.isArray(command)) {
       for (let commandName of command) {
-        commandsHandler.push({ name: commandName, handler: descriptor.value, description });
+        commandsHandler.push({
+          name: commandName,
+          handler: descriptor.value,
+          description,
+        });
       }
     } else {
-      commandsHandler.push({ name: command, handler: descriptor.value, description });
+      commandsHandler.push({
+        name: command,
+        handler: descriptor.value,
+        description,
+      });
     }
   };
 }
@@ -24,41 +41,45 @@ class MainCommands {
   private readonly message: CustomMessage;
   private readonly commandsPrefix: string;
   private banList: string[] = [];
+  private recorder = new Recorder();
   static recentlyDeletedMessageByBot = false;
 
   constructor(message: CustomMessage, prefix: string = '!') {
     logger(message);
-    getBanList().then(banList => this.banList = banList!)
+    getBanList().then((banList) => (this.banList = banList!));
     this.message = message;
     this.commandsPrefix = prefix;
     if (this.banList.includes(message.author.id)) return;
 
-
-    const messageArgs = this.message.content.split(' ').filter(v => !v.startsWith('!'));
+    const messageArgs = this.message.content
+      .split(' ')
+      .filter((v) => !v.startsWith('!'));
 
     for (const command of commandsHandler) {
       if (this.matchCommand(command.name)) {
         command.handler(message, ...messageArgs);
       }
     }
-    if (message.isAuthor)
-      message.react('👍');
-
+    if (message.isAuthor) message.react('👍');
   }
 
   private static async deleteMessage(message: CustomMessage, timeout = 100) {
-
-    await message.delete({timeout});
+    await message.delete({ timeout });
     this.recentlyDeletedMessageByBot = true;
-    setTimeout(() => this.recentlyDeletedMessageByBot = false, 500);
+    setTimeout(() => (this.recentlyDeletedMessageByBot = false), 500);
   }
 
   private matchCommand(candidate: string) {
-    const messageContent = this.message.content.split(' ').filter(v => v.startsWith('!'))[0];
+    const messageContent = this.message.content
+      .split(' ')
+      .filter((v) => v.startsWith('!'))[0];
     if (!messageContent) {
       return false;
     }
-    return messageContent.startsWith(this.commandsPrefix) && messageContent.split(this.commandsPrefix)[1] === candidate;
+    return (
+      messageContent.startsWith(this.commandsPrefix) &&
+      messageContent.split(this.commandsPrefix)[1] === candidate
+    );
   }
 
   @Command('move', 'Перемещение из одного гавно канала в другой гавно канал')
@@ -83,11 +104,13 @@ class MainCommands {
   async commands(message: CustomMessage) {
     const helpMessage = `
 Список всех команд:
-${commandsHandler.map(command => {
-      if (command.description !== 'просмотр всех доступных команд') {
-        return `${command.name} - ${command.description}\n`;
-      }
-    }).join('')}
+${commandsHandler
+  .map((command) => {
+    if (command.description !== 'просмотр всех доступных команд') {
+      return `${command.name} - ${command.description}\n`;
+    }
+  })
+  .join('')}
 `;
     await message.reply(helpMessage);
   }
@@ -112,13 +135,19 @@ ${commandsHandler.map(command => {
     }
   }
 
-  private static async playAudio(message: CustomMessage, url: string, volume = 1) {
+  private static async playAudio(
+    message: CustomMessage,
+    url: string,
+    volume = 1,
+  ) {
     const connection = message.member!.voice.channel!.join();
-    (await connection).play(ytdl(`${url}`, { filter: 'audioonly' }), { volume });
+    (await connection).play(ytdl(`${url}`, { filter: 'audioonly' }), {
+      volume,
+    });
   }
 
   @Command('play', 'ДЭНЦ ДЭНЦ ДЭНЦ')
-  async play(message: CustomMessage, url: string, volume="1") {
+  async play(message: CustomMessage, url: string, volume = '1') {
     await MainCommands.playAudio(message, url, parseInt(volume));
   }
 
@@ -141,12 +170,21 @@ ${commandsHandler.map(command => {
   @Command('ban', 'БАН НАХУЙ')
   async ban(message: CustomMessage, userId: string) {
     const banList = await getBanList();
-    if (message.isAuthor && userId && userId !== message.author.id && !banList!.includes(userId)) {
+    if (
+      message.isAuthor &&
+      userId &&
+      userId !== message.author.id &&
+      !banList!.includes(userId)
+    ) {
       banList!.push(userId);
-      fs.writeFile(pathResolve(__dirname, '../banlist.json'), JSON.stringify(banList), (err) => {
-        if (err) console.error(err);
-        else message.delete({ timeout: 100 });
-      });
+      fs.writeFile(
+        pathResolve(__dirname, '../banlist.json'),
+        JSON.stringify(banList),
+        (err) => {
+          if (err) console.error(err);
+          else message.delete({ timeout: 100 });
+        },
+      );
     }
   }
 
@@ -202,6 +240,15 @@ ${commandsHandler.map(command => {
   @Command('ljoin', 'Я хуй знает')
   async lJoin(message: CustomMessage) {
     await MainCommands.playAudio(message, 'https://youtu.be/l94gMfQVx9k');
+  }
+
+  @Command('record', 'Запись')
+  async record(message: CustomMessage) {
+    this.recorder.record(message);
+  }
+  @Command('stop', 'Запись')
+  async stopRecord(message: CustomMessage) {
+    this.recorder.saveExit(message);
   }
 }
 
