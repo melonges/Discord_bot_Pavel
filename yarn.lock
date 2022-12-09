@@ -100,9 +100,9 @@
   integrity sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==
 
 "@types/node@*", "@types/node@^18.7.13":
-  version "18.11.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.11.tgz#1d455ac0211549a8409d3cdb371cd55cc971e8dc"
-  integrity sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==
+  version "18.11.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.12.tgz#89e7f8aa8c88abf432f9bd594888144d7dba10aa"
+  integrity sha512-FgD3NtTAKvyMmD44T07zz2fEf+OKwutgBCEVM8GcvMGVGaDktiLNTDvPwC/LUe3PinMW+X6CuLOF2Ui1mAlSXg==
 
 "@types/node@^10.0.3":
   version "10.17.60"
@@ -317,6 +317,16 @@ discord-buttons-v13@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/discord-buttons-v13/-/discord-buttons-v13-4.0.2.tgz#8bdd4b553448364136ff82f21fbbf60c48bc36b1"
   integrity sha512-YJIq2kf8eBS8U42VCg3wpXg8nAQut4xiD2B4dnauRzuMHJMJVRyvRIKEMCOYNZuyy3+FBFhJhj5MnqmJYQIbiw==
+
+discord-player@^5.3.2:
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/discord-player/-/discord-player-5.3.2.tgz#66c1c07f97de5def70263c7f89a4810638522456"
+  integrity sha512-MVIL6VNBD9JWA0QIaqx6y7/e9a5uDjStp9zOaXvDgY291J+z7k14NU886+fYbczMPaIJYjHkVvy4TtbNdOxWFQ==
+  dependencies:
+    "@discordjs/voice" "^0.11.0"
+    libsodium-wrappers "^0.7.10"
+    tiny-typed-emitter "^2.1.0"
+    tslib "^2.4.0"
 
 discord.js@^12.5.3:
   version "12.5.3"
@@ -533,6 +543,18 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
+
+libsodium-wrappers@^0.7.10:
+  version "0.7.10"
+  resolved "https://registry.yarnpkg.com/libsodium-wrappers/-/libsodium-wrappers-0.7.10.tgz#13ced44cacb0fc44d6ac9ce67d725956089ce733"
+  integrity sha512-pO3F1Q9NPLB/MWIhehim42b/Fwb30JNScCNh8TcQ/kIc+qGLQch8ag8wb0keK3EP5kbGakk1H8Wwo7v+36rNQg==
+  dependencies:
+    libsodium "^0.7.0"
+
+libsodium@^0.7.0:
+  version "0.7.10"
+  resolved "https://registry.yarnpkg.com/libsodium/-/libsodium-0.7.10.tgz#c2429a7e4c0836f879d701fec2c8a208af024159"
+  integrity sha512-eY+z7hDrDKxkAK+QKZVNv92A5KYkxfvIshtBJkmg5TSiCnYqZP3i9OO9whE79Pwgm4jGaoHgkM4ao/b9Cyu4zQ==
 
 lru-cache@^6.0.0:
   version "6.0.0"
@@ -934,6 +956,11 @@ through@2, through@~2.3, through@~2.3.1:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
+
+tiny-typed-emitter@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tiny-typed-emitter/-/tiny-typed-emitter-2.1.0.tgz#b3b027fdd389ff81a152c8e847ee2f5be9fad7b5"
+  integrity sha512-qVtvMxeXbVej0cQWKqVSSAHmKZEHAvxdF8HEUBFWts8h+xEo5m/lEiPakuyZ3BnCBjOD8i24kzNOiOLLgsSxhA==
 
 to-regex-range@^5.0.1:
   version "5.0.1"
