@@ -23,7 +23,7 @@
     "build": "tsc"
   },
   "keywords": [],
-  "author": "Terminaate",
+  "author": "Melonges & Terminaate",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.7.13",
